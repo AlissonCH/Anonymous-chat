@@ -11,6 +11,14 @@ const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
 io.on('connection', (socket) => {
   console.log('Cliente conectado');
   // socket.join('myChat');
+  socket.on('join_room', (data) => {
+    socket.join(data);
+    console.log(`User with ID : ${socket.id} joined to room ${data}`);
+  });
+  socket.on('send_message', (data) => {
+    console.log(data);
+    socket.to(data.room).emit('receive_message', data);
+  });
 
   // socket.on('handle-connection', (username: string) => {
   //   console.log(username);
@@ -27,9 +35,9 @@ io.on('connection', (socket) => {
   //   socket.broadcast.to('myChat').emit('receive-message', message);
   // });
 
-  // socket.on('disconnect', () => {
-  //   userLeft(socket.id);
-  // });
+  socket.on('disconnect', () => {
+    console.log('User disconnected', socket.id);
+  });
 });
 
 server.listen(5000, () => console.log('Server started on port 5000...'));
