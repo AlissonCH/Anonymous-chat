@@ -1,14 +1,12 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { Route, Routes } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import Chat from './components/Chat';
+import GrupalChats from './pages/GrupalChats';
 import Nav from './components/Nav';
 import './styles/App.css';
 
 function App() {
-  const [username, setUsername] = useState('');
-  const [room, setRoom] = useState('');
   // const [connected, setConnected] = useState(false);
   const socketClient = useRef<Socket>();
 
@@ -36,32 +34,15 @@ function App() {
     };
   }, []);
 
-  const joinRoom = () => {
-    if (socketClient.current) {
-      socketClient.current.emit('join_room', room);
-    }
-  };
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Nav />
       <Routes>
-        <Route path='/' element={<Chat socket={socketClient.current} username={username} room={room} />}></Route>
+        <Route path='/' element={<GrupalChats socket={socketClient.current} />}></Route>
         <Route path='/chats'></Route>
         <Route path='/usuarios'></Route>
       </Routes>
-      <h1>Hola</h1>
-      <input
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-      />
-      <input
-        onChange={(e) => {
-          setRoom(e.target.value);
-        }}
-      />
-      <button onClick={joinRoom}>Unirse a la sala</button>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
