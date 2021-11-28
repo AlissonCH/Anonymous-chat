@@ -1,30 +1,43 @@
 import { useState } from 'react';
 import Chat from '../components/Chat';
+import styled from 'styled-components';
+import SideBar from '../components/SideBar';
 
-function GrupalChats({ socket }: { socket: any }) {
-  const [username, setUsername] = useState('');
-  const [room, setRoom] = useState('');
-  const joinRoom = () => {
-    if (socket) {
-      socket.emit('join_room', room);
-    }
-  };
+const Wrapper = styled.section`
+  display: flex;
+  width: 100%;
+`;
+
+function GrupalChats({
+  username,
+  setUsername,
+  room,
+  setRoom,
+  currentMessage,
+  setCurrentMessage,
+  allMessages,
+}: {
+  username: string;
+  setUsername: any;
+  room: any;
+  setRoom: any;
+  currentMessage: string;
+  setCurrentMessage: any;
+  allMessages: any;
+}) {
   return (
-    <div>
-      <h1>Hola</h1>
-      <input
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
+    <Wrapper>
+      <SideBar username={username} room={room} setRoom={setRoom} />
+      <Chat
+        room={room}
+        setRoom={setRoom}
+        username={username}
+        setUsername={setUsername}
+        currentMessage={currentMessage}
+        setCurrentMessage={setCurrentMessage}
+        allMessages={allMessages}
       />
-      <input
-        onChange={(e) => {
-          setRoom(e.target.value);
-        }}
-      />
-      <button onClick={joinRoom}>Unirse a la sala</button>
-      <Chat socket={socket} room={room} username={username} />
-    </div>
+    </Wrapper>
   );
 }
 

@@ -1,55 +1,81 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-function Chat({ socket, username, room }: { socket: any; username: any; room: any }) {
-  const [currentMessage, setCurrentMessage] = useState('');
+const Title = styled.h1`
+  font-size: 1.5em;
+  text-align: center;
+  color: palevioletred;
+`;
 
-  const sendMessage = async () => {
-    if (currentMessage !== '') {
-      const messageData = {
-        room,
-        author: username,
-        message: currentMessage,
-        time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
-      };
-      await socket.emit('send_message', messageData);
-    }
-  };
-  useEffect(() => {
-    if (socket) {
-      socket.on('receive_message', (data: { data: any }) => {
-        console.log(data);
-      });
-    }
-  }, [socket]);
+const Section = styled.section`
+width: 70%;
 
-  const Title = styled.h1`
-    font-size: 1.5em;
-    text-align: center;
-    color: palevioletred;
-  `;
+flex-direction: column
+padding: 4em;
+background: papayawhip;
+`;
 
-  const Wrapper = styled.section`
-    padding: 4em;
-    background: papayawhip;
-  `;
+function Chat({
+  username,
+  room,
+  setUsername,
+  currentMessage,
+  setCurrentMessage,
+  allMessages,
+}: {
+  username: String;
+  room: any;
+  setUsername: any;
+  setRoom: any;
+  currentMessage: string;
+  setCurrentMessage: any;
+  allMessages: any;
+}) {
+  const [messageInput, setMessageInput] = useState('');
+  // const sendMessage = async () => {
+  //   if (currentMessage !== '') {
+  //     const messageData = {
+  //       room,
+  //       author: username,
+  //       message: currentMessage,
+  //       time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
+  //     };
+  //     // await socket.emit('send_message', messageData);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on('receive_message', (data: { data: any }) => {
+  //       console.log(data);
+  //     });
+  //   }
+  // }, [socket]);
+  console.log(allMessages);
+  const showMessages = allMessages?.map((message: any) => (
+    <div key={message.time}>
+      <p>{message.author}</p>
+      <p>{message.message}</p>
+      <p>{message.time}</p>
+    </div>
+  ));
 
   return (
-    <div>
-      <Wrapper>
-        <Title>Chat grupal</Title>
-      </Wrapper>
+    <Section>
+      <div>
+        <Title>{room.name}</Title>
+      </div>
+      <div>{showMessages}</div>
       <div>
         <input
           type='text'
           placeholder='Hola...'
           onChange={(e) => {
-            setCurrentMessage(e.target.value);
+            setMessageInput(e.target.value);
           }}
         />
-        <button onClick={sendMessage}>Enviar</button>
+        <button onClick={() => setCurrentMessage(messageInput)}>Enviar</button>
       </div>
-    </div>
+    </Section>
   );
 }
 
