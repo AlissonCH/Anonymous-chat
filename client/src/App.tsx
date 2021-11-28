@@ -8,7 +8,6 @@ import './styles/App.css';
 import { getRandomArbitrary } from './utils/utils';
 
 function App() {
-  // const [connected, setConnected] = useState(false);
   interface StateProperties {
     roomId: number;
     author: string;
@@ -19,14 +18,19 @@ function App() {
     id: number;
     name: string;
   }
+  interface UsersProperties {
+    username: string;
+  }
+
   const socketClient = useRef<Socket>();
   const [room, setRoom] = useState<RoomProperties>({ id: 0, name: '' });
   const [currentMessage, setCurrentMessage] = useState('');
   const [allMessages, setAllMessages] = useState<StateProperties[]>([]);
   const [username, setUsername] = useState('');
+  const [allUsers, setAllUsers] = useState<UsersProperties[]>([]);
 
   const messageData = {
-    roomId: room?.id,
+    roomId: room.id,
     author: username,
     message: currentMessage,
     time:
@@ -36,53 +40,52 @@ function App() {
       ':' +
       new Date(Date.now()).getSeconds(),
   };
+
   useEffect(() => {
-    socketClient.current = io('http://localhost:5000');
-    if (socketClient.current) {
-      if (room.id !== 0) {
-        const messages = JSON.parse(localStorage.getItem(`${room.id}`) || '[]');
-        socketClient.current.emit('join_room', room.id);
-        if (messages?.length !== 0) {
-          setAllMessages(messages);
-        } else {
-          setAllMessages([]);
+    socketClient.current = io('http://localhost:5000', {
+      reconnection: true,
+    });
+    socketClient.current.on('connect', () => {
+      if (socketClient.current?.connected) {
+        if (room.id !== 0) {
+          const messages = JSON.parse(localStorage.getItem(`${room.id}`) || '[]');
+          socketClient.current.emit('join_room', { room: room.id, username });
+          if (messages?.length !== 0) {
+            setAllMessages(messages);
+          } else {
+            setAllMessages([]);
+          }
         }
       }
+    });
 
-      // localStorage.setItem(`room${}`)
-
-      // socketClient.current.on('username-submitted-successfully', () => {
-      //   setConnected(true);
-      // });
-      // socketClient.current.on('username-taken', () => {
-      //   toast.error('Username is taken');
-      // });
-      // socketClient.current.on('get-connected-users', (connectedUsers: { id: string; username: string }[]) => {
-      //   setConnectedUsers(connectedUsers.filter((user) => user.username !== username));
-      // });
-      // socketClient.current.on('receive-message', (message: { message: string; username: string }) => {
-      //   setMessages((prev) => [...prev, message]);
-      // });
-    }
     return () => {
       socketClient.current?.disconnect();
+      socketClient.current?.off();
       socketClient.current;
     };
-  }, [room]);
+  }, [room, username]);
 
   useEffect(() => {
     setUsername(`Anónimo${getRandomArbitrary()}`);
     localStorage.clear();
   }, []);
-
   useEffect(() => {
-    if (socketClient.current) {
+    if (socketClient.current?.connected) {
       if (currentMessage !== '') {
         setAllMessages([...allMessages, messageData]);
         socketClient.current.emit('send_message', messageData);
         localStorage.setItem(`${room.id}`, JSON.stringify([...allMessages, messageData]));
       }
       socketClient.current.on('receive_message', (data: any) => {
+        const unique: any = [];
+        [...allUsers, { username: data.author }].forEach((item) => {
+          const i = unique.findIndex((x: any) => x.username == item.username);
+          if (i <= -1) {
+            unique.push({ username: item.username });
+          }
+        });
+        setAllUsers(unique);
         setAllMessages([...allMessages, data]);
         localStorage.setItem(`${room.id}`, JSON.stringify([...allMessages, data]));
       });
@@ -92,6 +95,7 @@ function App() {
       setCurrentMessage('');
     };
   }, [allMessages, currentMessage]);
+  console.log(allUsers);
   return (
     <HashRouter>
       <Nav />
@@ -107,6 +111,7 @@ function App() {
               currentMessage={currentMessage}
               setCurrentMessage={setCurrentMessage}
               allMessages={allMessages}
+              allUsers={allUsers}
             />
           }
         ></Route>

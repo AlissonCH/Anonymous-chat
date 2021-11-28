@@ -50,7 +50,6 @@ function Chat({
   //     });
   //   }
   // }, [socket]);
-  console.log(allMessages);
   const showMessages = allMessages?.map((message: any) => (
     <div key={message.time}>
       <p>{message.author}</p>

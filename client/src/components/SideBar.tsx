@@ -12,7 +12,7 @@ const Wrapper = styled.section`
   width: 30%;
 `;
 
-function SideBar({ username, room, setRoom }: { username: String; room: any; setRoom: any }) {
+function SideBar({ username, room, setRoom, allUsers }: { username: String; room: any; setRoom: any; allUsers: any }) {
   interface StateProperties {
     name: string;
     id: number;
@@ -42,13 +42,6 @@ function SideBar({ username, room, setRoom }: { username: String; room: any; set
   useEffect(() => {
     setRoom(initialCategories[0]);
   }, []);
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on('receive_message', (data: { data: any }) => {
-  //       console.log(data);
-  //     });
-  //   }
-  // }, [socket]);
 
   const showAllCategories = allRooms.map((room: any) => (
     <div
@@ -58,6 +51,16 @@ function SideBar({ username, room, setRoom }: { username: String; room: any; set
       }}
     >
       {room.name}
+    </div>
+  ));
+  const showAllUsers = allUsers.map((user: any) => (
+    <div
+      key={user.username}
+      // onClick={() => {
+      //   setRoom(room);
+      // }}
+    >
+      {user.username}
     </div>
   ));
   return (
@@ -74,6 +77,10 @@ function SideBar({ username, room, setRoom }: { username: String; room: any; set
       />
       <button onClick={createCategory}>Guardar</button>
       <ul>{showAllCategories}</ul>
+      <div>
+        <p>Usuarios en línea</p>
+        {showAllUsers}
+      </div>
     </Wrapper>
   );
 }
