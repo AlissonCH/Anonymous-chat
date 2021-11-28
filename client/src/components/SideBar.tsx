@@ -12,45 +12,45 @@ const Wrapper = styled.section`
   width: 30%;
 `;
 
-function SideBar({ username, room, setRoom, allUsers }: { username: String; room: any; setRoom: any; allUsers: any }) {
-  interface StateProperties {
-    name: string;
-    id: number;
-  }
-  const initialCategories = [
-    {
-      name: 'Harry Potter',
-      id: 10001,
-    },
-    {
-      name: 'Naruto',
-      id: 10002,
-    },
-    {
-      name: 'BTS',
-      id: 10003,
-    },
-  ];
-  const [allRooms, setAllRooms] = useState<StateProperties[]>(initialCategories);
+function SideBar({
+  username,
+  room,
+  setRoom,
+  allUsers,
+  allRooms,
+  setAllRooms,
+}: {
+  username: String;
+  room: any;
+  setRoom: any;
+  allUsers: any;
+  allRooms: any;
+  setAllRooms: any;
+}) {
   const [newCategorieName, setNewCategorieName] = useState('');
 
   const createCategory = () => {
-    const allRoomsUpdated = [...allRooms, { name: newCategorieName, id: getRandomArbitrary() }];
+    const allRoomsUpdated = [...allRooms, { roomName: newCategorieName, roomId: getRandomArbitrary() }];
     setAllRooms(allRoomsUpdated);
+    setRoom({ roomName: newCategorieName, roomId: getRandomArbitrary() });
+    localStorage.setItem('room', JSON.stringify({ roomName: newCategorieName, roomId: getRandomArbitrary() }));
   };
 
   useEffect(() => {
-    setRoom(initialCategories[0]);
+    setRoom({
+      roomName: 'Harry Potter',
+      roomId: 10001,
+    });
   }, []);
 
   const showAllCategories = allRooms.map((room: any) => (
     <div
-      key={room.id}
+      key={room.roomId}
       onClick={() => {
         setRoom(room);
       }}
     >
-      {room.name}
+      {room.roomName}
     </div>
   ));
   const showAllUsers = allUsers.map((user: any) => (

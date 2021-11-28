@@ -61,7 +61,7 @@ function Chat({
   return (
     <Section>
       <div>
-        <Title>{room.name}</Title>
+        <Title>{room.roomName}</Title>
       </div>
       <div>{showMessages}</div>
       <div>

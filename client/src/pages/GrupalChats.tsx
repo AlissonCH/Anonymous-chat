@@ -17,6 +17,8 @@ function GrupalChats({
   setCurrentMessage,
   allMessages,
   allUsers,
+  allRooms,
+  setAllRooms,
 }: {
   username: string;
   setUsername: any;
@@ -26,10 +28,19 @@ function GrupalChats({
   setCurrentMessage: any;
   allMessages: any;
   allUsers: any;
+  allRooms: any;
+  setAllRooms: any;
 }) {
   return (
     <Wrapper>
-      <SideBar username={username} room={room} setRoom={setRoom} allUsers={allUsers} />
+      <SideBar
+        username={username}
+        room={room}
+        setRoom={setRoom}
+        allUsers={allUsers}
+        allRooms={allRooms}
+        setAllRooms={setAllRooms}
+      />
       <Chat
         room={room}
         setRoom={setRoom}

@@ -12,6 +12,7 @@ io.on('connection', (socket) => {
   console.log('Cliente conectado');
   let currentRoom = 0;
   socket.on('join_room', ({ room, username }) => {
+    console.log({ room, username });
     socket.join(room);
     currentRoom = room;
     console.info(`User with ID : ${socket.id} and username ${username} joined to room ${room}`);
