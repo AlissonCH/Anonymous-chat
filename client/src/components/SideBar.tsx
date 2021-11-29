@@ -35,6 +35,13 @@ function SideBar({
   const [newCategorie, setNewCategorie] = useState(false);
   const [categoriesFiltered, setCategoriesFiltered] = useState(allRooms);
 
+  useEffect(() => {
+    setRoom({
+      roomName: 'Harry Potter',
+      roomId: 10001,
+    });
+  }, []);
+
   const createCategory = (e: any) => {
     e.preventDefault();
     const room = { roomName: newCategorieName, roomId: getRandomArbitrary() };
@@ -44,12 +51,17 @@ function SideBar({
     localStorage.setItem('room', JSON.stringify(room));
   };
 
-  useEffect(() => {
-    setRoom({
-      roomName: 'Harry Potter',
-      roomId: 10001,
-    });
-  }, []);
+  const searchCategorie = (e: any) => {
+    setAllRooms(categoriesFiltered);
+    if (e.target.value !== '') {
+      const roomsFiltered = allRooms.filter((room: any) =>
+        room.roomName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setAllRooms(roomsFiltered);
+    } else {
+      setAllRooms(categoriesFiltered);
+    }
+  };
 
   const showAllCategories = allRooms.map((room: any) => (
     <Categorie
@@ -61,23 +73,13 @@ function SideBar({
       {room.roomName}
     </Categorie>
   ));
+
   const showAllUsers = allUsers.map((user: any) => <div key={user.username}>{user.username}</div>);
   const toggleState = (setState: any, state: boolean) => {
     if (!state) {
       setState(true);
     } else {
       setState(false);
-    }
-  };
-  const searchCategorie = (e: any) => {
-    setAllRooms(categoriesFiltered);
-    if (e.target.value !== '') {
-      const roomsFiltered = allRooms.filter((room: any) =>
-        room.roomName.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-      setAllRooms(roomsFiltered);
-    } else {
-      setAllRooms(categoriesFiltered);
     }
   };
 

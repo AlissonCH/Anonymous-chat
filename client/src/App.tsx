@@ -114,8 +114,6 @@ function App() {
             />
           }
         ></Route>
-        <Route path='/chats'></Route>
-        <Route path='/usuarios'></Route>
       </Routes>
     </HashRouter>
   );

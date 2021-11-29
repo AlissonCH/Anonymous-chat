@@ -1,12 +1,6 @@
 import Chat from '../components/Chat';
-import styled from 'styled-components';
 import SideBar from '../components/SideBar';
-
-const Wrapper = styled.section`
-  display: flex;
-  width: 100%;
-  height: 100vh;
-`;
+import { Wrapper } from '../components/styled/GrupalChats.styled';
 
 function GrupalChats({
   username,

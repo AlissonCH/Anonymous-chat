@@ -40,6 +40,7 @@ export const Input = styled.input`
   height: 40px;
   outline: none;
 `;
+
 export const InputCustom = styled.input`
   width: 100%;
   padding-left: 10px;
@@ -50,6 +51,7 @@ export const InputCustom = styled.input`
   color: #5063c7;
   outline: none;
 `;
+
 export const Label = styled.label`
   display: flex;
   align-items: center;

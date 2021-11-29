@@ -8,10 +8,9 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
 
 io.on('connection', (socket) => {
-  console.log('Cliente conectado');
+  console.info('Cliente conectado');
   let currentRoom = 0;
   socket.on('join_room', ({ room, username }) => {
-    console.log({ room, username });
     socket.join(room);
     currentRoom = room;
     console.info(`User with ID : ${socket.id} and username ${username} joined to room ${room}`);
@@ -23,8 +22,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected', socket.id);
+    console.info('User disconnected', socket.id);
   });
 });
 
-server.listen(5000, () => console.log('Server started on port 5000...'));
+server.listen(5000, () => console.info('Server started on port 5000...'));

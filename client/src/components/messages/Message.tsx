@@ -3,7 +3,6 @@ import Moment from 'react-moment';
 import { MessageReceived, MessageSended, Time } from '../styled/Chat.styled';
 
 const Message = ({ message }: { message: any }) => {
-  console.log(message);
   return (
     <div>
       {message?.messageReceived ? (

@@ -12,7 +12,3 @@ export interface RoomProperties {
 export interface UsersProperties {
   username: string;
 }
-// export interface StateProperties {
-//   roomName: string;
-//   roomId: number;
-// }

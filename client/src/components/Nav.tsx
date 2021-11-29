@@ -27,12 +27,6 @@ const Nav = () => {
         <Link to='/'>
           <p>Chats grupales</p>
         </Link>
-        <Link to='/chats'>
-          <p>Mis Chats</p>
-        </Link>
-        <Link to='/usuarios'>
-          <p>Usuarios en línea</p>
-        </Link>
       </DesktopMenu>
     </StyledNav>
   );
