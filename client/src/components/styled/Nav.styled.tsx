@@ -20,7 +20,7 @@ interface Props {
 
 export const MobileMenu = styled.nav<Props>`
   display: flex;
-  background-color: black;
+  background-color: #5063c7;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -30,13 +30,10 @@ export const MobileMenu = styled.nav<Props>`
   padding: 4rem 0.5rem;
   gap: 2rem;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 0.8rem;
   font-weight: bold;
   transform: ${({ open }) => (open ? 'translateX(0%);' : 'translateX(-100%);')};
   transition: transform 150ms ease-in;
-  a:first-child {
-    text-decoration: none;
-  }
   a {
     color: white;
   }
@@ -47,20 +44,14 @@ export const MobileMenu = styled.nav<Props>`
 
 export const DesktopMenu = styled.nav`
   display: flex;
-  background-color: black;
+  background-color: #5063c7;
   align-items: center;
   text-align: center;
   padding: 1rem 2rem;
   max-width: 100%;
-  height: 15%;
+  height: 30px;
   gap: 3rem;
-  font-size: 1.5rem;
-  a:first-child {
-    margin-right: auto;
-    &:hover {
-      text-decoration: none;
-    }
-  }
+  font-size: 1 rem;
   a {
     text-decoration: none;
     color: white;

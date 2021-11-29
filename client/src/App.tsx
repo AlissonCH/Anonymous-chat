@@ -37,12 +37,8 @@ function App() {
     roomId: room.roomId,
     author: username,
     message: currentMessage,
-    time:
-      new Date(Date.now()).getHours() +
-      ':' +
-      new Date(Date.now()).getMinutes() +
-      ':' +
-      new Date(Date.now()).getSeconds(),
+    time: new Date(Date.now()),
+    messageReceived: true,
   };
 
   useEffect(() => {
@@ -72,17 +68,19 @@ function App() {
 
   useEffect(() => {
     setUsername(`Anónimo${getRandomArbitrary()}`);
-    // localStorage.clear();
-    // allRooms.forEach((room) => localStorage.removeItem(`${room.roomId}`));
+    allRooms.forEach((room) => localStorage.removeItem(`${room.roomId}`));
   }, []);
+
   useEffect(() => {
     if (socketClient.current?.connected) {
       if (currentMessage !== '') {
+        messageData.messageReceived = false;
         setAllMessages([...allMessages, messageData]);
         socketClient.current.emit('send_message', messageData);
         localStorage.setItem(`${room.roomId}`, JSON.stringify([...allMessages, messageData]));
       }
       socketClient.current.on('receive_message', (data: any) => {
+        data.messageReceived = true;
         setAllUsers(unique(allUsers, data, 'username', 'author'));
         setAllMessages([...allMessages, data]);
         localStorage.setItem(`${room.roomId}`, JSON.stringify([...allMessages, data]));

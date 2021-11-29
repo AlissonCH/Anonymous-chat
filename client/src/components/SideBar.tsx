@@ -1,39 +1,47 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { getRandomArbitrary } from '../utils/utils';
-
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
-`;
-
-const Wrapper = styled.section`
-  width: 30%;
-`;
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  Categorie,
+  Wrapper,
+  Title,
+  Input,
+  Label,
+  InputCustom,
+  Display,
+  Circle,
+  Form,
+  Listas,
+} from './styled/SideBar.styled';
 
 function SideBar({
   username,
-  room,
   setRoom,
   allUsers,
   allRooms,
   setAllRooms,
+  setUsername,
 }: {
   username: String;
-  room: any;
+  setUsername: any;
   setRoom: any;
   allUsers: any;
   allRooms: any;
   setAllRooms: any;
 }) {
   const [newCategorieName, setNewCategorieName] = useState('');
+  const [change, setChange] = useState(false);
+  const [newCategorie, setNewCategorie] = useState(false);
+  const [categoriesFiltered, setCategoriesFiltered] = useState(allRooms);
 
-  const createCategory = () => {
-    const allRoomsUpdated = [...allRooms, { roomName: newCategorieName, roomId: getRandomArbitrary() }];
+  const createCategory = (e: any) => {
+    e.preventDefault();
+    const room = { roomName: newCategorieName, roomId: getRandomArbitrary() };
+    const allRoomsUpdated = [...allRooms, room];
     setAllRooms(allRoomsUpdated);
-    setRoom({ roomName: newCategorieName, roomId: getRandomArbitrary() });
-    localStorage.setItem('room', JSON.stringify({ roomName: newCategorieName, roomId: getRandomArbitrary() }));
+    setRoom(room);
+    localStorage.setItem('room', JSON.stringify(room));
   };
 
   useEffect(() => {
@@ -44,43 +52,75 @@ function SideBar({
   }, []);
 
   const showAllCategories = allRooms.map((room: any) => (
-    <div
+    <Categorie
       key={room.roomId}
       onClick={() => {
         setRoom(room);
       }}
     >
       {room.roomName}
-    </div>
+    </Categorie>
   ));
-  const showAllUsers = allUsers.map((user: any) => (
-    <div
-      key={user.username}
-      // onClick={() => {
-      //   setRoom(room);
-      // }}
-    >
-      {user.username}
-    </div>
-  ));
+  const showAllUsers = allUsers.map((user: any) => <div key={user.username}>{user.username}</div>);
+  const toggleState = (setState: any, state: boolean) => {
+    if (!state) {
+      setState(true);
+    } else {
+      setState(false);
+    }
+  };
+  const searchCategorie = (e: any) => {
+    setAllRooms(categoriesFiltered);
+    if (e.target.value !== '') {
+      const roomsFiltered = allRooms.filter((room: any) =>
+        room.roomName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setAllRooms(roomsFiltered);
+    } else {
+      setAllRooms(categoriesFiltered);
+    }
+  };
+
   return (
     <Wrapper>
-      <label>{username}</label>
-      <input placeholder='buscar...' />
-      <button>Crear nueva categoría</button>
-      <input
-        type='text'
-        placeholder='Nombre de nueva categoría'
-        onChange={(e) => {
-          setNewCategorieName(e.target.value);
-        }}
-      />
-      <button onClick={createCategory}>Guardar</button>
-      <ul>{showAllCategories}</ul>
-      <div>
-        <p>Usuarios en línea</p>
+      <Title>
+        {username}
+        <FontAwesomeIcon icon={faEdit} onClick={() => toggleState(setChange, change)} />
+      </Title>
+      {change ? (
+        <Input type='text' placeholder='Nuevo nombre' onChange={(e) => setUsername(e.target.value)} />
+      ) : (
+        <div />
+      )}
+      <Label>
+        <FontAwesomeIcon icon={faSearch} />
+        <InputCustom type='text' placeholder='Buscar...' onChange={searchCategorie} />
+      </Label>
+      <Display>
+        <h4>Todas las categorías</h4>
+        <Circle>
+          <FontAwesomeIcon icon={faPlus} onClick={() => toggleState(setNewCategorie, newCategorie)} />
+        </Circle>
+      </Display>
+      {newCategorie ? (
+        <Form onSubmit={createCategory}>
+          <label>Nombre de categoría</label>
+          <Input
+            type='text'
+            placeholder='Música...'
+            onChange={(e) => {
+              setNewCategorieName(e.target.value);
+            }}
+          />
+        </Form>
+      ) : (
+        <div />
+      )}
+      <Listas>{showAllCategories}</Listas>
+      <Listas>
+        <h4>Usuarios activos</h4>
         {showAllUsers}
-      </div>
+      </Listas>
     </Wrapper>
   );
 }

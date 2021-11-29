@@ -1,79 +1,43 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
-`;
-
-const Section = styled.section`
-width: 70%;
-
-flex-direction: column
-padding: 4em;
-background: papayawhip;
-`;
+import { useState } from 'react';
+import Message from './messages/Message';
+import { Section, ChatSection, Form, Input, Button, Title } from './styled/Chat.styled';
 
 function Chat({
-  username,
   room,
-  setUsername,
-  currentMessage,
   setCurrentMessage,
   allMessages,
 }: {
-  username: String;
   room: any;
-  setUsername: any;
-  setRoom: any;
   currentMessage: string;
   setCurrentMessage: any;
   allMessages: any;
 }) {
   const [messageInput, setMessageInput] = useState('');
-  // const sendMessage = async () => {
-  //   if (currentMessage !== '') {
-  //     const messageData = {
-  //       room,
-  //       author: username,
-  //       message: currentMessage,
-  //       time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
-  //     };
-  //     // await socket.emit('send_message', messageData);
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on('receive_message', (data: { data: any }) => {
-  //       console.log(data);
-  //     });
-  //   }
-  // }, [socket]);
-  const showMessages = allMessages?.map((message: any) => (
-    <div key={message.time}>
-      <p>{message.author}</p>
-      <p>{message.message}</p>
-      <p>{message.time}</p>
-    </div>
-  ));
+  const showMessages = allMessages?.map((message: any) => <Message message={message} />);
 
   return (
     <Section>
-      <div>
+      <ChatSection>
         <Title>{room.roomName}</Title>
-      </div>
-      <div>{showMessages}</div>
-      <div>
-        <input
+        {showMessages}
+      </ChatSection>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setCurrentMessage(messageInput);
+          setMessageInput('');
+        }}
+      >
+        <Input
           type='text'
           placeholder='Hola...'
           onChange={(e) => {
             setMessageInput(e.target.value);
           }}
+          value={messageInput}
         />
-        <button onClick={() => setCurrentMessage(messageInput)}>Enviar</button>
-      </div>
+        <Button>Enviar</Button>
+      </Form>
     </Section>
   );
 }

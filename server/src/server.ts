@@ -1,7 +1,6 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-// import { userJoin, userLeft, getUsers } from './util/users';
 
 const app = express();
 
@@ -22,21 +21,6 @@ io.on('connection', (socket) => {
       socket.to(data.roomId).emit('receive_message', data);
     }
   });
-
-  // socket.on('handle-connection', (username: string) => {
-  //   console.log(username);
-
-  //   if (!userJoin(socket.id, username)) {
-  //     socket.emit('username-taken');
-  //   } else {
-  //     socket.emit('username-submitted-successfully');
-  //     io.to('myChat').emit('get-connected-users', getUsers());
-  //   }
-  // });
-
-  // socket.on('message', (message: { message: string; username: string }) => {
-  //   socket.broadcast.to('myChat').emit('receive-message', message);
-  // });
 
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);

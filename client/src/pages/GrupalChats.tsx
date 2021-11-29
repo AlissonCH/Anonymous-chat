@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Chat from '../components/Chat';
 import styled from 'styled-components';
 import SideBar from '../components/SideBar';
@@ -6,6 +5,7 @@ import SideBar from '../components/SideBar';
 const Wrapper = styled.section`
   display: flex;
   width: 100%;
+  height: 100vh;
 `;
 
 function GrupalChats({
@@ -35,7 +35,7 @@ function GrupalChats({
     <Wrapper>
       <SideBar
         username={username}
-        room={room}
+        setUsername={setUsername}
         setRoom={setRoom}
         allUsers={allUsers}
         allRooms={allRooms}
@@ -43,9 +43,6 @@ function GrupalChats({
       />
       <Chat
         room={room}
-        setRoom={setRoom}
-        username={username}
-        setUsername={setUsername}
         currentMessage={currentMessage}
         setCurrentMessage={setCurrentMessage}
         allMessages={allMessages}

@@ -13,7 +13,7 @@ const Nav = () => {
       </HamburgerButton>
       <MobileMenu open={navOpen}>
         <Link to='/' onClick={() => setNav(false)}>
-          <h1>Chats grupales</h1>
+          <p>Chats grupales</p>
         </Link>
         <Link to='/chats' onClick={() => setNav(false)}>
           <p>Mis Chats</p>
@@ -25,7 +25,7 @@ const Nav = () => {
 
       <DesktopMenu>
         <Link to='/'>
-          <h1>Chats grupales</h1>
+          <p>Chats grupales</p>
         </Link>
         <Link to='/chats'>
           <p>Mis Chats</p>
